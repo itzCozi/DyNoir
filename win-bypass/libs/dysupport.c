@@ -1,0 +1,48 @@
+#include <Tlhelp32.h>
+#include <process.h>
+#include <stdio.h>
+#include <string.h>
+#include <winbase.h>
+#include <windows.h>
+
+int killProcessByName(char *filename) {
+  int ret = 1;
+  HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, 0);
+  PROCESSENTRY32 pEntry;
+  pEntry.dwSize = sizeof(pEntry);
+  BOOL hRes = Process32First(hSnapShot, &pEntry);
+  while (hRes) {
+    if (strcmp(pEntry.szExeFile, filename) == 0) {
+      HANDLE hProcess =
+          OpenProcess(PROCESS_TERMINATE, 0, (DWORD)pEntry.th32ProcessID);
+      if (hProcess != NULL) {
+        TerminateProcess(hProcess, 9);
+        CloseHandle(hProcess);
+        ret = 0;
+      } else {
+        return GetLastError();
+      }
+    }
+    hRes = Process32Next(hSnapShot, &pEntry);
+  }
+  CloseHandle(hSnapShot);
+  return ret;
+}
+
+void getProcesses(char arr[255][255]) {
+  HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, 0);
+  PROCESSENTRY32 pEntry;
+  pEntry.dwSize = sizeof(pEntry);
+  BOOL hRes = Process32First(hSnapShot, &pEntry);
+  int reti = 0;
+  while (hRes) {
+    snprintf((char *)&arr[reti], 255, "%s", pEntry.szExeFile);
+    hRes = Process32Next(hSnapShot, &pEntry);
+    reti++;
+  }
+  CloseHandle(hSnapShot);
+}
+
+void test() { 
+    killProcessByName("chrome.exe"); 
+}
