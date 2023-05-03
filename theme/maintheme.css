@@ -1,27 +1,27 @@
 p {
-  font-family: "Calibri", serif;
-  font-size: 16pt;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 14pt;
   color: #000000;
   text-align: justify;
 }
 
 h1 {
   font-size: 40px;
-  font-family: "Calibri", serif;
+  font-family: "Times New Roman", serif;
   text-align: center;
   color: black;
 }
 
 h2 {
   font-size: 35px;
-  font-family: "Calibri", serif;
+  font-family: "Times New Roman", serif;
   text-align: justify;
   color: black;
 }
 
 h3 {
   font-size: 30px;
-  font-family: "Calibri", serif;
+  font-family: "Times New Roman", serif;
   text-align: justify;
   color: black;
 }
@@ -29,13 +29,13 @@ h3 {
 a:link {
   text-decoration: none;
   font-size: 14px;
-  font-family: "Calibri", serif;
+  font-family: "Times New Roman", serif;
   color: blue;
 }
 a:hover {
   text-decoration: underline;
   font-size: 14px;
-  font-family: "Calibri", serif;
+  font-family: "Times New Roman", serif;
   color: blue;
 }
 
