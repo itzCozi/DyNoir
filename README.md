@@ -10,8 +10,7 @@ I still have to create the DyKnow-Killer for windows ill write it in python and 
 If none of these methods are easy enough or any other reason [Read This Gist](https://gist.github.com/itzCozi/6a3a0fd9f8b2786f38109e6b011bf24b).
 
 
-Contact Me
----------------------------------
+### Contact Me
 discord: BadDevoleper#4200                                                                                                                                             
 Email: Cooperransom08@outlook.com  
 [Discord Server](https://discord.gg/xGnQQGxwq2)  | 
