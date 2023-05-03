@@ -26,21 +26,6 @@ h3 {
   color: black;
 }
 
-pl {
-  text-decoration: none;
-  font-size: 14px;
-  font-family: "Calibri", serif;
-  text-align: justify;
-  color: black;
-}
-pl:hover {
-  text-decoration: underline;
-  font-size: 14px;
-  font-family: "Calibri", serif;
-  text-align: justify;
-  color: black;
-}
-
 a:link {
   text-decoration: none;
   font-size: 14px;
