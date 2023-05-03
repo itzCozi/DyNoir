@@ -1,7 +1,7 @@
 p {
   font-family: "Times New Roman", Times, serif;
-  font-size: 14pt;
-  color: #000000;
+  font-size: 12pt;
+  color: black;
   text-align: justify;
 }
 
@@ -32,6 +32,7 @@ a:link {
   font-family: "Times New Roman", serif;
   color: blue;
 }
+
 a:hover {
   text-decoration: underline;
   font-size: 14px;
