@@ -15,14 +15,14 @@ h1 {
 h2 {
   font-size: 35px;
   font-family: "Calibri", serif;
-  text-align: center;
+  text-align: justify;
   color: black;
 }
 
 h3 {
   font-size: 30px;
   font-family: "Calibri", serif;
-  text-align: center;
+  text-align: justify;
   color: black;
 }
 
@@ -30,14 +30,14 @@ pl {
   text-decoration: none;
   font-size: 14px;
   font-family: "Calibri", serif;
-  text-align: center;
+  text-align: justify;
   color: black;
 }
 pl:hover {
   text-decoration: underline;
   font-size: 14px;
   font-family: "Calibri", serif;
-  text-align: center;
+  text-align: justify;
   color: black;
 }
 
