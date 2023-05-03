@@ -1,0 +1,46 @@
+p {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 14pt;
+  color: #000000;
+  text-align: justify;
+}
+
+h1 {
+  font-size: 40px;
+  font-family: "Calibri", serif;
+  text-align: center;
+  color: black;
+}
+
+pl {
+  text-decoration: none;
+  font-size: 14px;
+  font-family: "Calibri", serif;
+  text-align: center;
+  color: black;
+}
+pl:hover {
+  text-decoration: underline;
+  font-size: 14px;
+  font-family: "Calibri", serif;
+  text-align: center;
+  color: black;
+}
+
+a:link {
+  text-decoration: none;
+  font-size: 14px;
+  font-family: "Calibri", serif;
+  color: blue;
+}
+a:hover {
+  text-decoration: underline;
+  font-size: 14px;
+  font-family: "Calibri", serif;
+  color: blue;
+}
+
+hr {
+  color: black;
+  size: 1;
+}
