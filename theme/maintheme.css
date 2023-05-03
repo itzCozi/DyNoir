@@ -1,5 +1,5 @@
 p {
-  font-family: "Times New Roman", Times, serif;
+  font-family: "Calibri", serif;
   font-size: 14pt;
   color: #000000;
   text-align: justify;
@@ -7,6 +7,20 @@ p {
 
 h1 {
   font-size: 40px;
+  font-family: "Calibri", serif;
+  text-align: center;
+  color: black;
+}
+
+h2 {
+  font-size: 35px;
+  font-family: "Calibri", serif;
+  text-align: center;
+  color: black;
+}
+
+h3 {
+  font-size: 30px;
   font-family: "Calibri", serif;
   text-align: center;
   color: black;
