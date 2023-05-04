@@ -3,7 +3,8 @@
 import os, sys
 import signal
 
-protectedProcesses = ['chrome', 'spotify', 'code', 'steam', 'RuntimeBroker.exe', 'svchost.exe'] # Processes that will be ignored by kill
+protectedProcesses = ['chrome.exe', 'spotify.exe', 'code.exe', 'steam.exe', 'RuntimeBroker.exe', 'svchost.exe',
+'ntoskrnl.exe', 'winlogon.exe', 'wininit.exe', 'csrss.exe', 'smss.exe', 'explorer.exe']
 
 def getDyKnowExes():
     allCrucial = []
@@ -14,9 +15,9 @@ def getDyKnowExes():
     return allCrucial
 
 
-def killProcess(name):
+def killProcess(PID):
   try:
-    os.kill(name, signal.SIGTERM)
+    os.kill(PID, signal.SIGTERM)
     return 0
   except Exception as e:
     print(f'ERROR: An unknown error was encountered. \n{e}\n')
@@ -65,6 +66,7 @@ def getProcesses():
   except Exception as e:
     print(f'ERROR: An unknown error was encountered. \n{e}\n')
     sys.exit(1)
+
 
 if __name__ == '__main__':
   blacklisted = []
