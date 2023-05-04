@@ -1,9 +1,11 @@
+# TODO: Force file to run as admin like in SafeGuard
 # TODO: Test on mock folder and create a .exe to put in there
 
 import os, sys
 import signal
+import socket
 
-clear = lambda: os.system('clear')
+clear = lambda: os.system('cls')
 protectedProcesses = [
   'chrome.exe', 'spotify.exe', 'code.exe', 'steam.exe', 'RuntimeBroker.exe',
   'svchost.exe', 'ntoskrnl.exe', 'winlogon.exe', 'wininit.exe', 'csrss.exe',
@@ -146,7 +148,7 @@ if __name__ == '__main__':
           os.remove(f'C:/Program Files/DyKnow/{item}')
           print(f'Executor deleted file {item}.')
 
-    print(f'\nDetected files have been removed from {os.uname()[1]}.')
+    print(f'\nDetected files have been removed from {socket.gethostname()}.')
     input("Press 'Enter' to quit.")
     sys.exit(1)
 
