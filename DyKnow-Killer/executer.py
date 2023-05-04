@@ -1,4 +1,5 @@
 # Add more user prints to the code before compiling due to long tasks
+# Test on mock folder and create a .exe to put in there
 
 import os, sys
 import signal
