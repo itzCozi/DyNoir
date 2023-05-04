@@ -1,7 +1,9 @@
+# Add more user prints to the code before compiling due to long tasks
+
 import os, sys
 import signal
 
-protectedProcesses = [] # Add some protected processes
+protectedProcesses = ['chrome', 'spotify', 'code', 'steam', 'RuntimeBroker.exe', 'svchost.exe'] # Processes that will be ignored by kill
 
 def getDyKnowExes():
     allCrucial = []
@@ -38,25 +40,25 @@ def get_PID(process):
 
 
 def nameFinder(PID):
-  index = PID.find('.exe')
-  output = os.popen(f'tasklist /svc /FI "PID eq {PID[0:index]}"').read()
+  output = os.popen(f'tasklist /svc /FI "PID eq {PID}"').read()
   for line in str(output).splitlines():
     if '.exe' in line:
       index = line.find('.exe')
       diffrence = line[0:index]
       retvalue = f'{diffrence}.exe'
-  return retvalue
+      return retvalue
 
 
 def getProcesses():
   try:
     retlist = []
     output = os.popen('wmic process get description, processid').read()
+    print('Please wait this may take a moment...')
     for line in output.splitlines():
       if '.exe' in line:
         index = line.find('.exe')
         itemobj = line[index + 5:].replace(' ', '')
-        retlist.append(itemobj)
+        retlist.append(nameFinder(itemobj))
       else:
         output = output.replace(line, '')
     return retlist
@@ -64,16 +66,14 @@ def getProcesses():
     print(f'ERROR: An unknown error was encountered. \n{e}\n')
     sys.exit(1)
 
-
 if __name__ == '__main__':
-  while True:
-    blacklisted = []
-    processes = getProcesses()
-    blacklisted.extend(getDyKnowExes())
-    for file in blacklisted:
-      if file in processes and not protectedProcesses:
-        name = file.replace('.exe', '')
-        PID = get_PID(name)
-      else:
-        pass
-        # If not running delete file
+  blacklisted = []
+  processes = getProcesses()
+  blacklisted.extend(getDyKnowExes())
+  for file in blacklisted:
+    if file in processes and not protectedProcesses:
+      name = file.replace('.exe', '')
+      PID = get_PID(name)
+      # Then kill the process and delete the file!
+    else:
+      os.remove(f'C:/Program Files/DyKnow/{file}') # If file is not found delete its assumed location
