@@ -1,7 +1,3 @@
-# TODO: Add sleep statments so the user can read output
-# TODO: Test on a diffrent real app like VSCode or something (Dont delete it tho)
-# TODO: Test on mock folder and create a .exe to put in there
-
 import os, sys
 import signal
 import ctypes
