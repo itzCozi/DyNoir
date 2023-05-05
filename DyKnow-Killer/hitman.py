@@ -6,6 +6,7 @@ import os, sys
 import signal
 import ctypes
 import socket
+import time
 
 clear = lambda: os.system('cls')
 protectedProcesses = [
@@ -43,6 +44,7 @@ class sd:
       return 0
     except Exception as e:
       print(f'ERROR: An unknown error was encountered. \n{e}\n')
+      time.sleep(5)
       return 1
 
   def get_PID(process):
@@ -58,6 +60,7 @@ class sd:
       return retlist
     except Exception as e:
       print(f'ERROR: An unknown error was encountered. \n{e}\n')
+      time.sleep(5)
       sys.exit(1)
 
   def nameFinder(PID):
@@ -84,6 +87,7 @@ class sd:
       return retlist
     except Exception as e:
       print(f'ERROR: An unknown error was encountered. \n{e}\n')
+      time.sleep(5)
       sys.exit(1)
 
 
@@ -108,13 +112,16 @@ class driver:
   def errorHandler(error_code):
     if error_code == '1':
       print('The execution operation already removed crucial files.')
+      time.sleep(5)
       sys.exit(0)
     if error_code == '2':
       print('DyKnow files cannot be found, is it installed?')
+      time.sleep(5)
       sys.exit(1)
     else:
       clear()
       print('Invaild input, quitting.')
+      time.sleep(5)
       sys.exit(1)
 
 
@@ -161,12 +168,19 @@ if __name__ == '__main__':
       input("Press 'Enter' to quit.")
       sys.exit(1)
 
+    except PermissionError:
+      print(f'ERROR: Action executed without required permissions, try \
+        \nclosing DyKnow or running the program as an administrator.')
+      time.sleep(5)
+      sys.exit(1)
     except Exception as e:
       print(f'ERROR: An unknown error was encountered. \n{e}\n')
+      time.sleep(5)
       sys.exit(1)
-  
+      
   else:
     print('Please run this program as an administrator.')
+    time.sleep(5)
     sys.exit(1)
 
 else:
