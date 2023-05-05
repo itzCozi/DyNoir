@@ -36,17 +36,7 @@ class sd:
           allCrucial.append(item)
     return allCrucial
 
-  def killProcess(PID):
-    try:
-      print(PID)
-      os.system(f'taskkill /F /PID {PID}')
-      return 0
-    except Exception as e:
-      print(f'ERROR: An unknown error was encountered. \n{e}\n')
-      time.sleep(5)
-      return 1
-
-  def get_PID(process):
+  def getPID(process):
     try:
       retlist = []
       output = os.popen(f'powershell ps -Name {process}').read()
@@ -59,8 +49,16 @@ class sd:
       return retlist
     except Exception as e:
       print(f'ERROR: An unknown error was encountered. \n{e}\n')
-      time.sleep(5)
       sys.exit(1)
+      
+  def killProcess(name):
+    PIDlist = sd.getPID(name)
+    for PID in PIDlist:
+      try:
+        os.system(f'taskkill /F /PID {PID}')
+      except Exception as e:
+        print(f'ERROR: An unknown error was encountered. \n{e}\n')
+        sys.exit(1)
 
   def nameFinder(PID):
     output = os.popen(f'tasklist /svc /FI "PID eq {PID}"').read()
