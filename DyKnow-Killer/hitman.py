@@ -1,4 +1,5 @@
-# TODO: Stop the program from killing non dyknow processes
+# TODO: Stop the program from killing non dyknow 
+# processes or processes not originating from program files
 
 import os, sys
 import ctypes
