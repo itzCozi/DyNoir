@@ -1,5 +1,6 @@
+# TODO: Stop the program from killing non dyknow processes
+
 import os, sys
-import signal
 import ctypes
 import socket
 import time
@@ -36,7 +37,8 @@ class sd:
 
   def killProcess(PID):
     try:
-      os.kill(PID, signal.SIGTERM)
+      print(PID)
+      os.system(f'taskkill /F /PID {PID}')
       return 0
     except Exception as e:
       print(f'ERROR: An unknown error was encountered. \n{e}\n')
