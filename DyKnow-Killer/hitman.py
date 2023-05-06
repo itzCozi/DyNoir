@@ -2,7 +2,6 @@
 # processes or processes not originating from program files
 
 import os, sys
-import ctypes
 import socket
 import time
 
@@ -71,30 +70,33 @@ class sd:
 
   def getProcesses():
     try:
+      iterated = []
       retlist = []
       output = os.popen('wmic process get description, processid').read()
       print('Please wait this may take a moment...')
       for line in output.splitlines():
         if '.exe' in line:
           index = line.find('.exe')
-          itemobj = line[index + 5:].replace(' ', '')
-          retlist.append(sd.nameFinder(itemobj))
+          item = line[index + 5:].replace(' ', '')
+          itemobj = sd.nameFinder(item)
+          if not itemobj in iterated:
+            retlist.append(itemobj)
+          else:
+            continue
+          iterated.append(itemobj)
         else:
           output = output.replace(line, '')
-      return retlist
+      for item in retlist:
+        if item == None:
+          retlist.remove(item)
+        else:
+          return retlist
     except Exception as e:
       print(f'ERROR: An unknown error was encountered. \n{e}\n')
-      time.sleep(5)
       sys.exit(1)
 
 
 class driver:
-
-  def is_admin():
-    try:
-      return ctypes.windll.shell32.IsUserAnAdmin()
-    except:
-      return False
 
   def addProtected():
     file = 'protect.txt'
@@ -124,59 +126,49 @@ class driver:
 
 # Initialization code
 if __name__ == '__main__':
-  if driver.is_admin():
-    clear()
-    print("      ----- Windows DyKnow Executor ----- \
-      \nThis program will delete crucial DyKnow files to \
-      \nrender DyKnow unable to run properly. Once ran \
-      \nyou will be unable to reinstall DyKnow unless you \
-      \npull some crafty shit like recovering the files. \n")
-    input("Press 'Enter' to start \n")
-    clear()
-
-    try:
-      driver.addProtected()
-      processes = sd.getProcesses()
-      blacklisted = []
-      blacklisted.extend(sd.getDyKnowProcesses())
-      if len(blacklisted) == 0:
-        clear()
-        print("The process cant locate DyKnow's files, This program might have already been ran if so please type 1 if not type 2.")
-        q_a = input('> ')
-        driver.errorHandler(q_a)
-
-      for file in blacklisted:
-        if file in processes and not protectedProcesses:
+  clear()
+  print("      ----- Windows DyKnow Executor ----- \
+    \nThis program will delete crucial DyKnow files to \
+    \nrender DyKnow unable to run properly. Once ran \
+    \nyou will be unable to reinstall DyKnow unless you \
+    \npull some crafty shit like recovering the files. \n")
+  input("Press 'Enter' to start \n")
+  clear()
+  try:
+    driver.addProtected()
+    processes = sd.getProcesses()
+    blacklisted = []
+    blacklisted.extend(sd.getDyKnowProcesses())
+    if len(blacklisted) == 0:
+      clear()
+      print("The process cant locate DyKnow's files, This program might have already been ran if so please type 1 if not type 2.")
+      q_a = input('> ')
+      driver.errorHandler(q_a)
+    for file in blacklisted:
+      if file in processes:
+        if file not in protectedProcesses:
+          print('OH NO')
           print(f'File {file} is running as process')
           name = file.replace('.exe', '')
-          PID = sd.get_PID(name)
-          sd.killProcess(PID)
+          sd.killProcess(name)
           print(f'Killed running process {name}.')
           for item in sd.findDyKnowExe(file):
             os.remove(f'C:/Program Files/DyKnow/{item}')
             print(f'Executor deleted file {item}.')
-
-        else:
-          for item in sd.findDyKnowExe(file):
-            os.remove(f'C:/Program Files/DyKnow/{item}')
-            print(f'Executor deleted file {item}.')
-
-      print(f'\nDetected files have been removed from {socket.gethostname()}.')
-      input("Press 'Enter' to quit.")
-      sys.exit(1)
-
-    except PermissionError:
-      print(f'ERROR: Action executed without required permissions, try \
-        \nclosing DyKnow or running the program as an administrator.')
-      time.sleep(5)
-      sys.exit(1)
-    except Exception as e:
-      print(f'ERROR: An unknown error was encountered. \n{e}\n')
-      time.sleep(5)
-      sys.exit(1)
-      
-  else:
-    print('Please run this program as an administrator.')
+      else:
+        for item in sd.findDyKnowExe(file):
+          os.remove(f'C:/Program Files/DyKnow/{item}')
+          print(f'Executor deleted file {item}.')
+    print(f'\nDetected files have been removed from {socket.gethostname()}.')
+    input("Press 'Enter' to quit.")
+    sys.exit(1)
+  except PermissionError:
+    print(f'ERROR: Action executed without required permissions, try \
+      \nclosing DyKnow or running the program as an administrator.')
+    time.sleep(5)
+    sys.exit(1)
+  except Exception as e:
+    print(f'ERROR: An unknown error was encountered. \n{e}\n')
     time.sleep(5)
     sys.exit(1)
 
