@@ -160,6 +160,7 @@ if __name__ == '__main__':
     \npull some crafty shit like recovering the files. \n")
   input("Press 'Enter' to start \n")
   clear()
+
   try:
     driver.addProtected()
     processes = utility.getProcesses()
@@ -173,7 +174,6 @@ if __name__ == '__main__':
     for file in blacklisted:
       if file in processes:
         if file not in protectedProcesses:
-          print('OH NO')  # A test statment
           print(f'File {file} is running as process')
           sd.removeRunning(file)
           print(f'Killed/deleted running process {file}.')
