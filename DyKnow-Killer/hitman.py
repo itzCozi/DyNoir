@@ -1,5 +1,4 @@
-# TODO: Stop the program from killing non dyknow 
-# processes or processes not originating from program files
+# TODO: Test test test
 
 import os, sys
 import socket
@@ -13,27 +12,49 @@ protectedProcesses = [
 ]
 
 
-class sd:
+class utility:
 
-  def getDyKnowProcesses():
-    allCrucial = []
-    for folderName, folders, files in os.walk('C:/Program Files/DyKnow'):
-      for item in files:
-        if item.endswith('.exe'):
-          allCrucial.append(item)
-    return allCrucial
+  def processPath(process):
+    if '.exe' in process:
+      process = process[:-4]
+    try:
+      out = os.popen(f'powershell (Get-Process {process}).Path').read()
+      for line in out.splitlines():
+        if os.path.exists(line):
+          return line
+    except Exception as e:
+      print(f'ERROR: An unknown error was encountered. \n{e}\n')
+      sys.exit(1)
 
-  def findDyKnowExe(target_exe):
-    allCrucial = []
-    base_dir = 'C:/Program Files/DyKnow/'
-    for r, d, f in os.walk(base_dir):
-      for file in f:
-        if target_exe in file:
-          item = f'{r}/{file}'.replace(base_dir, '')
-          if item.find('/') == 0:
-            item = item.replace('/', '')
-          allCrucial.append(item)
-    return allCrucial
+  def getProcesses():
+    try:
+      iterated = set()
+      retlist = []
+      output = os.popen('wmic process get description, processid').read()
+      print('Please wait this may take a moment...')
+
+      for line in output.splitlines():
+        if '.exe' in line:
+          index = line.find('.exe')
+          item = line[index + 5:].replace(' ', '')
+          itemobj = utility.nameFinder(item)
+          if itemobj and itemobj not in iterated:
+            retlist.append(itemobj)
+            iterated.add(itemobj)
+
+      return retlist
+    except Exception as e:
+      print(f'ERROR: An unknown error was encountered. \n{e}\n')
+      sys.exit(1)
+
+  def nameFinder(PID):
+    output = os.popen(f'tasklist /svc /FI "PID eq {PID}"').read()
+    for line in str(output).splitlines():
+      if '.exe' in line:
+        index = line.find('.exe')
+        diffrence = line[0:index]
+        retvalue = f'{diffrence}.exe'
+        return retvalue
 
   def getPID(process):
     try:
@@ -49,51 +70,43 @@ class sd:
     except Exception as e:
       print(f'ERROR: An unknown error was encountered. \n{e}\n')
       sys.exit(1)
+
+
+class sd:
+
+  def getDyKnowProcesses():
+    allCrucial = []
+    for folderName, folders, files in os.walk('C:/Program Files/DyKnow'):
+      for item in files:
+        if item.endswith('.exe'):
+          allCrucial.append(item)
+    return allCrucial
+
+  def findDyKnowExe(target_exe):
+    base_dir = 'C:/Program Files/DyKnow/'
+    for r, d, f in os.walk(base_dir):
+      for file in f:
+        if target_exe in file:
+          item = f'{r}/{file}'.replace(base_dir, '')
+          if item.find('/') == 0:
+            item = item.replace('/', '')
+            return item
       
-  def killProcess(name):
-    PIDlist = sd.getPID(name)
-    for PID in PIDlist:
+  def removeRunning(process):
+    proc_path = utility.processPath(process)
+    if not '.exe' in process:
+      process = f'{process}.exe'
+    else:
       try:
-        os.system(f'taskkill /F /PID {PID}')
+        try:
+          commands.killProcess(process)
+        except:
+          pass
+        time.sleep(0.5)
+        os.remove(proc_path)
       except Exception as e:
         print(f'ERROR: An unknown error was encountered. \n{e}\n')
         sys.exit(1)
-
-  def nameFinder(PID):
-    output = os.popen(f'tasklist /svc /FI "PID eq {PID}"').read()
-    for line in str(output).splitlines():
-      if '.exe' in line:
-        index = line.find('.exe')
-        diffrence = line[0:index]
-        retvalue = f'{diffrence}.exe'
-        return retvalue
-
-  def getProcesses():
-    try:
-      iterated = []
-      retlist = []
-      output = os.popen('wmic process get description, processid').read()
-      print('Please wait this may take a moment...')
-      for line in output.splitlines():
-        if '.exe' in line:
-          index = line.find('.exe')
-          item = line[index + 5:].replace(' ', '')
-          itemobj = sd.nameFinder(item)
-          if not itemobj in iterated:
-            retlist.append(itemobj)
-          else:
-            continue
-          iterated.append(itemobj)
-        else:
-          output = output.replace(line, '')
-      for item in retlist:
-        if item == None:
-          retlist.remove(item)
-        else:
-          return retlist
-    except Exception as e:
-      print(f'ERROR: An unknown error was encountered. \n{e}\n')
-      sys.exit(1)
 
 
 class driver:
@@ -136,7 +149,7 @@ if __name__ == '__main__':
   clear()
   try:
     driver.addProtected()
-    processes = sd.getProcesses()
+    processes = utility.getProcesses()
     blacklisted = []
     blacklisted.extend(sd.getDyKnowProcesses())
     if len(blacklisted) == 0:
@@ -147,21 +160,21 @@ if __name__ == '__main__':
     for file in blacklisted:
       if file in processes:
         if file not in protectedProcesses:
-          print('OH NO')
+          print('OH NO') # A test statment
           print(f'File {file} is running as process')
           name = file.replace('.exe', '')
-          sd.killProcess(name)
-          print(f'Killed running process {name}.')
-          for item in sd.findDyKnowExe(file):
-            os.remove(f'C:/Program Files/DyKnow/{item}')
-            print(f'Executor deleted file {item}.')
-      else:
-        for item in sd.findDyKnowExe(file):
-          os.remove(f'C:/Program Files/DyKnow/{item}')
+          sd.removeRunning(file)
+          print(f'Killed/deleted running process {name}.')
+          del_file = sd.findDyKnowExe(file)
+          os.remove(f'C:/Program Files/DyKnow/{del_file}')
           print(f'Executor deleted file {item}.')
+      else:
+        del_file = sd.findDyKnowExe(file)
+        os.remove(f'C:/Program Files/DyKnow/{del_file}')
+        print(f'Executor deleted file {item}.')
     print(f'\nDetected files have been removed from {socket.gethostname()}.')
     input("Press 'Enter' to quit.")
-    sys.exit(1)
+    sys.exit(0)
   except PermissionError:
     print(f'ERROR: Action executed without required permissions, try \
       \nclosing DyKnow or running the program as an administrator.')
