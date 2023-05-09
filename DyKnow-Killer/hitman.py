@@ -1,21 +1,23 @@
-# TODO: Test test test
+# TODO: Test driver.addProtected() then print protectedProcesses.
+# TODO: Review initlization code and reformat
 
 import os, sys
 import socket
+import signal
 import time
 
 clear = lambda: os.system('cls')
 protectedProcesses = [
   'chrome.exe', 'spotify.exe', 'code.exe', 'steam.exe', 'RuntimeBroker.exe',
   'svchost.exe', 'ntoskrnl.exe', 'winlogon.exe', 'wininit.exe', 'csrss.exe',
-  'smss.exe', 'explorer.exe'
+  'smss.exe', 'explorer.exe', 'qbittorent.exe', 'cmd.exe', 'Terminal.exe'
 ]
 
 
 class utility:
 
   def processPath(process):
-    if '.exe' in process:
+    if process.endswith('.exe'):
       process = process[:-4]
     try:
       out = os.popen(f'powershell (Get-Process {process}).Path').read()
@@ -74,12 +76,23 @@ class utility:
 
 class sd:
 
+  def killProcess(name):
+    if name.endswith('.exe'):
+      name = name.replace('.exe', '')
+    PIDlist = utility.getPID(name)
+    for PID in PIDlist:
+      try:
+        os.kill(int(PID), signal.SIGTERM)
+      except Exception as e:
+        print(f'ERROR: An unknown error was encountered. \n{e}\n')
+        sys.exit(1)
+
   def getDyKnowProcesses():
     allCrucial = []
-    for folderName, folders, files in os.walk('C:/Program Files/DyKnow'):
-      for item in files:
-        if item.endswith('.exe'):
-          allCrucial.append(item)
+    for r, d, f in os.walk('C:/Program Files/DyKnow'):
+      for file in f:
+        if file.endswith('.exe'):
+          allCrucial.append(file)
     return allCrucial
 
   def findDyKnowExe(target_exe):
@@ -91,15 +104,15 @@ class sd:
           if item.find('/') == 0:
             item = item.replace('/', '')
             return item
-      
+
   def removeRunning(process):
     proc_path = utility.processPath(process)
-    if not '.exe' in process:
+    if not process.endswith('.exe'):
       process = f'{process}.exe'
     else:
       try:
         try:
-          commands.killProcess(process)
+          sd.killProcess(process)
         except:
           pass
         time.sleep(0.5)
@@ -112,14 +125,14 @@ class sd:
 class driver:
 
   def addProtected():
-    file = 'protect.txt'
+    file = f'{os.getcwd()}/protect.txt'
     if not os.path.exists(file):
       print(f'No {file} library found, skipping.')
     else:
       with open(file, 'r') as protected_lib:
         content = protected_lib.read()
         for line in content.splitlines():
-          protectedProcesses.append(line)
+          protectedProcesses.append(line).replace('\n', '')
 
   def errorHandler(error_code):
     if error_code == '1':
@@ -137,10 +150,10 @@ class driver:
       sys.exit(1)
 
 
-# Initialization code
+# Initialization code (Cover your eyes)
 if __name__ == '__main__':
   clear()
-  print("      ----- Windows DyKnow Executor ----- \
+  print("   ----- Windows DyKnow Executor ----- \
     \nThis program will delete crucial DyKnow files to \
     \nrender DyKnow unable to run properly. Once ran \
     \nyou will be unable to reinstall DyKnow unless you \
@@ -160,23 +173,24 @@ if __name__ == '__main__':
     for file in blacklisted:
       if file in processes:
         if file not in protectedProcesses:
-          print('OH NO') # A test statment
+          print('OH NO')  # A test statment
           print(f'File {file} is running as process')
-          name = file.replace('.exe', '')
           sd.removeRunning(file)
-          print(f'Killed/deleted running process {name}.')
+          print(f'Killed/deleted running process {file}.')
           del_file = sd.findDyKnowExe(file)
           os.remove(f'C:/Program Files/DyKnow/{del_file}')
-          print(f'Executor deleted file {item}.')
+          print(f'Executor deleted file {del_file}.')
       else:
         del_file = sd.findDyKnowExe(file)
         os.remove(f'C:/Program Files/DyKnow/{del_file}')
-        print(f'Executor deleted file {item}.')
+        print(f'Executor deleted file {del_file}.')
+
     print(f'\nDetected files have been removed from {socket.gethostname()}.')
     input("Press 'Enter' to quit.")
     sys.exit(0)
+
   except PermissionError:
-    print(f'ERROR: Action executed without required permissions, try \
+    print('ERROR: Action executed without required permissions, try \
       \nclosing DyKnow or running the program as an administrator.')
     time.sleep(5)
     sys.exit(1)
