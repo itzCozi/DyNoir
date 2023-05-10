@@ -1,4 +1,5 @@
 # DyNoir
+![Banner](https://github.com/itzCozi/DyNoir/blob/main/ignore/banner.png?raw=true)
 
 ## Cross-Platform Privacy
 DyNoir is the final answer (hopefully) in defeating DyKnow i've been reverse engineering DyKnow for the past couple of weeks and found a exploit using chrome extensions with built-in Web browsers. This was a great start but most chrome extensions are or will be blocked... except google's very own [Coding With Chrome](https://chrome.google.com/webstore/detail/coding-with-chrome/becloognjehhioodmnimnehjcibkloed?hl=en-US) extension. Due to how blocking extensions works (for now) you cannot block extensions made by Chrome therefore this is the extension we will use for the exploit. Now I know google probably scrapes the web looking for this kinda stuff so I won't share how it works here but you can follow the steps [here](https://github.com/itzCozi/DyNoir/wiki/How-to-use-DyNoir).
