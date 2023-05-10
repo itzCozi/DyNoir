@@ -1,8 +1,10 @@
-# TODO: Test driver.addProtected() then print protectedProcesses.
-# TODO: Review initlization code and reformat
+# NOTE: To properly run this file you must compile it to .exe (Due to elevation)
+# NOTE: If you want to run this program please run it as admin it will 
+# attempt a self elevate though this is not guaranteed to work.
 
 import os, sys
 import socket
+import ctypes
 import signal
 import time
 
@@ -10,7 +12,7 @@ clear = lambda: os.system('cls')
 protectedProcesses = [
   'chrome.exe', 'spotify.exe', 'code.exe', 'steam.exe', 'RuntimeBroker.exe',
   'svchost.exe', 'ntoskrnl.exe', 'winlogon.exe', 'wininit.exe', 'csrss.exe',
-  'smss.exe', 'explorer.exe', 'qbittorent.exe', 'cmd.exe', 'Terminal.exe'
+  'smss.exe', 'explorer.exe', 'qbittorent.exe', 'python.exe', 'WindowsTerminal.exe'
 ]
 
 
@@ -33,7 +35,7 @@ class utility:
       iterated = set()
       retlist = []
       output = os.popen('wmic process get description, processid').read()
-      print('Please wait this may take a moment...')
+      print('Please wait this may take a moment...\n')
 
       for line in output.splitlines():
         if '.exe' in line:
@@ -89,21 +91,23 @@ class sd:
 
   def getDyKnowProcesses():
     allCrucial = []
-    for r, d, f in os.walk('C:/Program Files/DyKnow'):
+    base_dir = 'C:/Program Files/DyKnow'
+    for r, d, f in os.walk(base_dir):
       for file in f:
         if file.endswith('.exe'):
-          allCrucial.append(file)
+          fileobj = f'{r}/{file}'.replace('/', '\\')
+          allCrucial.append(fileobj)
     return allCrucial
 
   def findDyKnowExe(target_exe):
-    base_dir = 'C:/Program Files/DyKnow/'
+    base_dir = 'C:/Program Files/DyKnow'
     for r, d, f in os.walk(base_dir):
       for file in f:
         if target_exe in file:
           item = f'{r}/{file}'.replace(base_dir, '')
           if item.find('/') == 0:
             item = item.replace('/', '')
-            return item
+          return item.replace('\\', '/')
 
   def removeRunning(process):
     proc_path = utility.processPath(process)
@@ -123,16 +127,31 @@ class sd:
 
 
 class driver:
+  def isAdmin():
+    try:
+      return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+      return False
+
+  def checkPerms():
+    admin = driver.isAdmin()
+    if admin == False:
+      print('ERROR: Hitman is running without admin, attempting self elevate.')
+      time.sleep(2)
+      ctypes.windll.shell32.ShellExecuteW(None, 'runas', sys.executable,' '.join(sys.argv), None, 1)
+      time.sleep(1)
+    if admin == True:
+      pass
 
   def addProtected():
-    file = f'{os.getcwd()}/protect.txt'
+    file = f'{os.getcwd()}/protect.txt'.replace('\\', '/')
     if not os.path.exists(file):
-      print(f'No {file} library found, skipping.')
+      print(f'No library found at {file}, skipping.')
     else:
       with open(file, 'r') as protected_lib:
         content = protected_lib.read()
         for line in content.splitlines():
-          protectedProcesses.append(line).replace('\n', '')
+          protectedProcesses.append(line)
 
   def errorHandler(error_code):
     if error_code == '1':
@@ -142,7 +161,7 @@ class driver:
     if error_code == '2':
       print('DyKnow files cannot be found, is it installed?')
       time.sleep(5)
-      sys.exit(1)
+      sys.exit(0)
     else:
       clear()
       print('Invaild input, quitting.')
@@ -152,8 +171,11 @@ class driver:
 
 # Initialization code (Cover your eyes)
 if __name__ == '__main__':
+  driver.checkPerms()
+  if not driver.isAdmin():
+    sys.exit(1)
   clear()
-  print("   ----- Windows DyKnow Executor ----- \
+  print("   ----- Windows DyKnow Hitman ----- \
     \nThis program will delete crucial DyKnow files to \
     \nrender DyKnow unable to run properly. Once ran \
     \nyou will be unable to reinstall DyKnow unless you \
@@ -168,22 +190,25 @@ if __name__ == '__main__':
     blacklisted.extend(sd.getDyKnowProcesses())
     if len(blacklisted) == 0:
       clear()
-      print("The process cant locate DyKnow's files, This program might have already been ran if so please type 1 if not type 2.")
+      print("Hitman cant locate DyKnow's files, This program might have already been ran if so please type 1 if not type 2.")
       q_a = input('> ')
       driver.errorHandler(q_a)
     for file in blacklisted:
-      if file in processes:
+      file_name = os.path.basename(file).split('\\')[-1]
+      file = file.replace('\\', '/')
+      if file_name in processes:
         if file not in protectedProcesses:
-          print(f'File {file} is running as process')
-          sd.removeRunning(file)
-          print(f'Killed/deleted running process {file}.')
-          del_file = sd.findDyKnowExe(file)
-          os.remove(f'C:/Program Files/DyKnow/{del_file}')
-          print(f'Executor deleted file {del_file}.')
+          del_file = sd.findDyKnowExe(file_name)
+          print(f'File {file} is running as a process.')
+          sd.removeRunning(del_file)
+          print(f'Hitman killed/deleted running process {file}.')
       else:
-        del_file = sd.findDyKnowExe(file)
-        os.remove(f'C:/Program Files/DyKnow/{del_file}')
-        print(f'Executor deleted file {del_file}.')
+        if file not in protectedProcesses:
+          del_file = sd.findDyKnowExe(file_name)
+          os.remove(f'C:/Program Files/DyKnow/{del_file}')
+          print(f'Hitman deleted file {del_file}.')
+        else:
+          continue
 
     print(f'\nDetected files have been removed from {socket.gethostname()}.')
     input("Press 'Enter' to quit.")
@@ -196,9 +221,9 @@ if __name__ == '__main__':
     sys.exit(1)
   except Exception as e:
     print(f'ERROR: An unknown error was encountered. \n{e}\n')
-    time.sleep(5)
     sys.exit(1)
 
 else:
   print(f'ERROR: You cannot import {__file__}.')
+  time.sleep(5)
   sys.exit(1)
