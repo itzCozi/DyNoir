@@ -1,6 +1,6 @@
 # NOTE: To properly run this file you must compile it to .exe (Due to elevation)
-# NOTE: If you want to run this program please run it as admin it will 
-# attempt a self elevate though this is not guaranteed to work.
+# NOTE: If you want to run this program please run it as admin it will attempt 
+# a self elevate though this is not guaranteed to work.
 
 import os, sys
 import socket
