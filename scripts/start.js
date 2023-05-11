@@ -127,13 +127,13 @@ while (true) {
 			process.platform === 'win32' ? '\x1B[2J\x1B[0f' : '\x1B[2J\x1B[3J\x1B[H'
 		);
 
-		console.log(
-			`You can now view ${chalk.bold('website-aio')} in the browser.`
-		);
-
 		console.log('');
 
 		const addr = server.address();
+
+    console.log(
+      'Please use the browser link to open UB.\n'
+    );
 
 		console.log(
 			`  ${chalk.bold('Local:')}            http://${
@@ -142,7 +142,7 @@ while (true) {
 		);
 
 		console.log(
-			`  ${chalk.bold('Local:')}            http://localhost${
+			`  ${chalk.bold('Browser:')}          http://localhost${
 				addr.port === 80 ? '' : ':' + chalk.bold(addr.port)
 			}`
 		);
