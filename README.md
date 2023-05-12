@@ -1,5 +1,5 @@
 # UB-Fork
-This is the UB website-aio and there is a walk through on how to use it [here](https://github.com/itzCozi/DyNoir/wiki/Deploying-UB-Fork-Through-Codespace)
+This is the UB ub-fork and there is a walk through on how to use it [here](https://github.com/itzCozi/DyNoir/wiki/Deploying-UB-Fork-Through-Codespace)
 
 ## Commands
 ```

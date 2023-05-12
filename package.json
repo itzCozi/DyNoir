@@ -6,7 +6,7 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/holy-unblocker/website-aio.git"
+		"url": "https://github.com/holy-unblocker/ub-fork.git"
 	},
 	"private": true,
 	"type": "module",
