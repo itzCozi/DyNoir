@@ -6,6 +6,9 @@ DyNoir is the final answer (hopefully) in defeating DyKnow i've been reverse eng
 ## Windows DyKnow Killer
 DyKnow Hitman works with admin privleges find it in the releases or look at the [source code](https://github.com/itzCozi/DyNoir/blob/main/DyKnow-Killer/hitman.py).
 
+## HolyUnblocker Fork
+The UBF branch is a fork of the fabled [HolyUnblocker](https://holyubofficial.net/) ran in a Codespace as a locally hosted website, all steps required are listed on the [wiki-page](https://github.com/itzCozi/DyNoir/wiki/Deploying-UB-Fork-Through-Codespace).
+
 ## Jailbreaking
 If none of these methods are easy enough or any other reason [Read This Gist](https://gist.github.com/itzCozi/6a3a0fd9f8b2786f38109e6b011bf24b).
 
